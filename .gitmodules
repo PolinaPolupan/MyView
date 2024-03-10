@@ -1,0 +1,6 @@
+[submodule "MyView/vendor/spdlog"]
+	path = MyView/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "MyView/vendor/GLFW"]
+	path = MyView/vendor/GLFW
+	url = https://github.com/PolinaPolupan/glfw
