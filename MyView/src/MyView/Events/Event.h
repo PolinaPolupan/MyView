@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mvpch.h"
 #include "MyView/Core.h"
 
 namespace MyView {
@@ -57,8 +58,7 @@ namespace MyView {
 	public:
 		EventDispatcher(Event& event)
 			: m_Event(event)
-		{
-		}
+		{}
 
 		// F will be deduced by the compiler
 		template<typename T, typename F>
@@ -75,9 +75,6 @@ namespace MyView {
 		Event& m_Event;
 	};
 
-	inline std::ostream& operator<<(std::ostream& os, const Event& e)
-	{
-		return os << e.ToString();
-	}
+	inline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
 
-}
+};

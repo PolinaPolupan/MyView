@@ -47,6 +47,11 @@ project "MyView"
 		"dwmapi.lib"
 	}
 
+	libdirs 
+	{
+		"vendor/GLFW/lib"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"

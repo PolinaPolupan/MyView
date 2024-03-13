@@ -4,3 +4,4 @@
 [submodule "MyView/vendor/GLFW"]
 	path = MyView/vendor/GLFW
 	url = https://github.com/PolinaPolupan/glfw
+	branch = latest
