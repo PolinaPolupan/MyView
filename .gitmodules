@@ -5,3 +5,6 @@
 	path = MyView/vendor/GLFW
 	url = https://github.com/PolinaPolupan/glfw
 	branch = latest
+[submodule "MyView/vendor/imgui"]
+	path = MyView/vendor/imgui
+	url = https://github.com/PolinaPolupan/imgui
