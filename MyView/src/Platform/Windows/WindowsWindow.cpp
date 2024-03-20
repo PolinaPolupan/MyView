@@ -5,6 +5,8 @@
 #include "MyView/Events/KeyEvent.h"
 #include "MyView/Events/MouseEvent.h"
 
+#include <glad/glad.h>
+
 namespace MyView {
 
 	static bool s_GLFWInitialized = false;
@@ -48,6 +50,8 @@ namespace MyView {
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		MV_CORE_ASSERT(status, "Failed to initialize Glad");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -129,6 +133,12 @@ namespace MyView {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			MouseMovedEvent event((float)xPos, (float)yPos);
+			data.EventCallback(event);
+		});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(keycode);
 			data.EventCallback(event);
 		});
 	}
