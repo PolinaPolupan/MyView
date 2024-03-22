@@ -1,13 +1,17 @@
 #pragma once
 
 #ifdef MV_PLATFORM_WINDOWS
-	#ifdef MV_BUILD_DLL
-		#define MYVIEW_API __declspec(dllexport)
-	#else
-		#define MYVIEW_API __declspec(dllimport)
-	#endif // MV_BUILD_DLL
-#else 
-	#error Only supports Windows
+	#if MV_DYNAMIC_LINK
+		#ifdef MV_BUILD_DLL
+			#define MYVIEW_API __declspec(dllexport)
+		#else
+			#define MYVIEW_API __declspec(dllimport)
+		#endif // MV_BUILD_DLL
+	#else 
+		#define MYVIEW_API
+	#endif
+	#else 
+		#error Only supports Windows
 #endif
 
 #ifdef MV_DEBUG 

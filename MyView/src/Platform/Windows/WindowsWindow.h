@@ -2,6 +2,8 @@
 
 #include "MyView/Window.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace MyView {
@@ -28,6 +30,7 @@ namespace MyView {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		OpenGLContext* m_Context;
 
 		struct WindowData
 		{
