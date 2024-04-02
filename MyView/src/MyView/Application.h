@@ -6,6 +6,9 @@
 #include "Layer.h"
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
+#include "MyView/Renderer/Shader.h"
+#include "MyView/Renderer/Buffer.h"
+#include "MyView/Renderer/VertexArray.h"
 
 namespace MyView {
 	
@@ -31,6 +34,12 @@ namespace MyView {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<VertexArray> m_VertexArray;
+
 	private:
 		static Application* s_Instance;
 	};
