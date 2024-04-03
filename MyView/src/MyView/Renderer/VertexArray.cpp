@@ -9,8 +9,8 @@ namespace MyView {
 	{
         switch (Renderer::GetAPI())
         {
-        case RendererAPI::None: MV_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-        case RendererAPI::OpenGL: return new OpenGLVertexArray();
+        case RendererAPI::API::None: MV_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+        case RendererAPI::API::OpenGL: return new OpenGLVertexArray();
         }
         MV_CORE_ASSERT(false, "Unknown RendererAPI!");
         return nullptr;
