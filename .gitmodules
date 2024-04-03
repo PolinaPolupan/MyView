@@ -8,6 +8,7 @@
 [submodule "MyView/vendor/imgui"]
 	path = MyView/vendor/imgui
 	url = https://github.com/PolinaPolupan/imgui
+	branch = docking
 [submodule "MyView/vendor/glm"]
 	path = MyView/vendor/glm
 	url = https://github.com/g-truc/glm
