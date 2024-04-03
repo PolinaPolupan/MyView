@@ -20,7 +20,7 @@ IncludeDir["glm"] = "MyView/vendor/glm"
 
 include "MyView/vendor/GLFW"
 include "MyView/vendor/Glad"
-include "MyView/vendor/ImGui"
+include "MyView/vendor/imgui"
 
 project "MyView"
 	location "MyView"
@@ -60,11 +60,6 @@ project "MyView"
 		"ImGui",
 		"opengl32.lib",
 		"dwmapi.lib"
-	}
-
-	libdirs 
-	{
-		"vendor/GLFW/lib"
 	}
 
 	filter "system:windows"
@@ -107,9 +102,7 @@ project "Sandbox"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	includedirs
@@ -132,8 +125,7 @@ project "Sandbox"
 		
 		links
 		{
-			"MyView",
-			"ImGui"
+			"MyView"
 		}
 
 	filter "configurations:Debug"
