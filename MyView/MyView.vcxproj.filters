@@ -99,7 +99,13 @@
     <ClInclude Include="src\MyView\Renderer\GraphicsContext.h">
       <Filter>src\MyView\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\MyView\Renderer\RenderCommand.h">
+      <Filter>src\MyView\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\MyView\Renderer\Renderer.h">
+      <Filter>src\MyView\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MyView\Renderer\RendererAPI.h">
       <Filter>src\MyView\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\MyView\Renderer\Shader.h">
@@ -115,6 +121,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -1377,9 +1386,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\MyView\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\MyView\Renderer\RenderCommand.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\MyView\Renderer\OrthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MyView\Application.cpp">
@@ -1403,7 +1410,13 @@
     <ClCompile Include="src\MyView\Renderer\Buffer.cpp">
       <Filter>src\MyView\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\MyView\Renderer\RenderCommand.cpp">
+      <Filter>src\MyView\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\MyView\Renderer\Renderer.cpp">
+      <Filter>src\MyView\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MyView\Renderer\RendererAPI.cpp">
       <Filter>src\MyView\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\MyView\Renderer\Shader.cpp">
@@ -1418,6 +1431,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1430,8 +1446,6 @@
     <ClCompile Include="src\mvpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MyView\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\MyView\Renderer\RenderCommand.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\MyView\Renderer\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>

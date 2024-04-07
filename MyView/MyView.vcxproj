@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\MyView\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\MyView.h" />
     <ClInclude Include="src\MyView\Application.h" />
     <ClInclude Include="src\MyView\Core.h" />
@@ -591,6 +592,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\MyView\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\MyView\Application.cpp" />
     <ClCompile Include="src\MyView\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\MyView\ImGui\ImGuiLayer.cpp" />

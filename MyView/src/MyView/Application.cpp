@@ -11,11 +11,15 @@
 
 #include "Renderer/Renderer.h"
 
+#include "MyView/Renderer/OrthographicCamera.h"
+#include "MyView/KeyCodes.h"
+
 namespace MyView {
 
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		: m_Camera(-1.5f, 1.5f,-1.5f, 1.5f)
 	{
 		MV_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -57,6 +61,8 @@ namespace MyView {
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
 
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 			out vec4 v_Color;
 
@@ -64,7 +70,7 @@ namespace MyView {
 			{
 				v_Color = a_Color;
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 
 		)";
@@ -98,10 +104,11 @@ namespace MyView {
 			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			m_Camera.SetRotation({0.0f, 0.0f, 45.f});
+
+			Renderer::BeginScene(m_Camera);
 			{
-				m_Shader->Bind();
-				Renderer::Submit(m_VertexArray);
+				Renderer::Submit(m_Shader, m_VertexArray);
 				
 				Renderer::EndScene();
 			}
@@ -123,6 +130,16 @@ namespace MyView {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(MV_BIND_EVENT_FN(Application::OnWindowClosed));
 		MV_CORE_TRACE("{0}", e);
+
+		if (e.GetEventType() == MyView::EventType::KeyPressed)
+		{
+			MyView::KeyPressedEvent& event = (MyView::KeyPressedEvent&)e;
+			if (event.GetKeyCode() == MV_KEY_RIGHT_SHIFT)
+			{
+				glm::vec3 pos = m_Camera.GetPosition();
+				m_Camera.SetPosition({ pos.x - 0.01f, pos.y, pos.z });
+			}
+		}
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{

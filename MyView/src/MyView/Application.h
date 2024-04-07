@@ -9,6 +9,7 @@
 #include "MyView/Renderer/Shader.h"
 #include "MyView/Renderer/Buffer.h"
 #include "MyView/Renderer/VertexArray.h"
+#include "MyView/Renderer/OrthographicCamera.h"
 
 namespace MyView {
 	
@@ -39,6 +40,8 @@ namespace MyView {
 		std::shared_ptr<VertexBuffer> m_VertexBuffer;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 		std::shared_ptr<VertexArray> m_VertexArray;
+
+		OrthographicCamera m_Camera;
 
 	private:
 		static Application* s_Instance;
