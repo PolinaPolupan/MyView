@@ -10,6 +10,7 @@
 #include "MyView/Renderer/Buffer.h"
 #include "MyView/Renderer/VertexArray.h"
 #include "MyView/Renderer/OrthographicCamera.h"
+#include "MyView/Core/Timestep.h"
 
 namespace MyView {
 	
@@ -30,19 +31,13 @@ namespace MyView {
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
-
+	private:
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		OrthographicCamera m_Camera;
-
+		Timestep m_Timestep;
+		float m_LastFrameTime = 0.f;
 	private:
 		static Application* s_Instance;
 	};

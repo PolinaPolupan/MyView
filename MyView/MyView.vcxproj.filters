@@ -1387,6 +1387,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\MyView\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\MyView\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MyView\Application.cpp">

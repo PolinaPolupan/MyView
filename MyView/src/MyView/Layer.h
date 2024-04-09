@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "MyView/Core/Timestep.h"
 #include "Events/Event.h"
 
 namespace MyView {
@@ -13,7 +13,7 @@ namespace MyView {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

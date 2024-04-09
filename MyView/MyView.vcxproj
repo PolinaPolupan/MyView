@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\MyView\Core\Timestep.h" />
     <ClInclude Include="src\MyView\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\MyView.h" />
     <ClInclude Include="src\MyView\Application.h" />

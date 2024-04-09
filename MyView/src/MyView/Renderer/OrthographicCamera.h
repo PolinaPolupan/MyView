@@ -15,6 +15,8 @@ namespace MyView {
 		inline const glm::vec3& GetRotation() const { return m_Rotation; }
 		inline void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
 
+		void SetProjectionMatrix(float left, float right, float bottom, float top);
+
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		inline const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
