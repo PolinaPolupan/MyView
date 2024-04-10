@@ -1,6 +1,8 @@
 #include <MyView.h>
 #include <imgui/imgui.h>
 
+#include "glm/gtc/matrix_transform.hpp"
+
 class ExampleLayer : public MyView::Layer
 {
 public:
@@ -8,6 +10,7 @@ public:
 		: Layer("Example")
 		, m_Camera(-1280.f/720.f, 1280.f/720.f, -1.f, 1.f)
 		, m_CameraPosition(0.0f)
+		, m_Position(1.f)
 	{
 		m_VertexArray.reset(MyView::VertexArray::Create());
 
@@ -41,6 +44,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -49,7 +53,7 @@ public:
 			{
 				v_Color = a_Color;
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 
 		)";
@@ -94,12 +98,14 @@ public:
 				m_Camera.SetPosition({ pos.x + (mousePosX / len) * m_CameraSpeed * ts, pos.y + (mousePosY / len) * m_CameraSpeed * ts, pos.z});
 			}
 		}
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position);
+
 		MyView::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 		MyView::RenderCommand::Clear();
 
 		MyView::Renderer::BeginScene(m_Camera);
 		{
-			MyView::Renderer::Submit(m_Shader, m_VertexArray);
+			MyView::Renderer::Submit(m_Shader, m_VertexArray, transform);
 
 			MyView::Renderer::EndScene();
 		}
@@ -129,6 +135,7 @@ private:
 	float m_CameraSpeed = 3.f;
 	float m_PrevMousePosX;
 	float m_PrevMousePosY;
+	glm::vec3 m_Position;
 };
 
 
