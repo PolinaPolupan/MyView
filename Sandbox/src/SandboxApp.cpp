@@ -2,6 +2,7 @@
 #include <imgui/imgui.h>
 
 #include "glm/gtc/matrix_transform.hpp"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 class ExampleLayer : public MyView::Layer
 {
@@ -10,22 +11,21 @@ public:
 		: Layer("Example")
 		, m_Camera(-1280.f/720.f, 1280.f/720.f, -1.f, 1.f)
 		, m_CameraPosition(0.0f)
-		, m_Position(1.f)
+		, m_Position(0.f)
 	{
 		m_VertexArray.reset(MyView::VertexArray::Create());
 
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.f,  1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.f,  0.0f, 1.0f, 0.0f, 1.0f,
-			 0.f,   0.5f, 0.f,  0.0f, 0.0f, 1.0f, 1.0f,
+		float vertices[] = {
+			-0.5f, -0.5f, 0.f,
+			 0.5f, -0.5f, 0.f,
+			 0.f,   0.5f, 0.f,
 		};
 
 		m_VertexBuffer.reset(MyView::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
 			MyView::BufferLayout layout = {
-				{ MyView::ShaderDataType::Float3, "a_Position" },
-				{ MyView::ShaderDataType::Float4, "a_Color" }
+				{ MyView::ShaderDataType::Float3, "a_Position" }
 			};
 
 			m_VertexBuffer->SetLayout(layout);
@@ -41,18 +41,12 @@ public:
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
 
-			out vec3 v_Position;
-			out vec4 v_Color;
-
 			void main()
 			{
-				v_Color = a_Color;
-				v_Position = a_Position;
 				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 
@@ -63,17 +57,16 @@ public:
 			
 			layout(location = 0) out vec4 color;
 
-			in vec3 v_Position;
-			in vec4 v_Color;
+			uniform vec4 u_Color;
 
 			void main()
 			{
-				color = v_Color;
+				color = u_Color;
 			}
 
 		)";
 
-		m_Shader.reset(new MyView::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(MyView::Shader::Create(vertexSrc, fragmentSrc));
 	}
 
 	void OnUpdate(MyView::Timestep ts) override
@@ -93,9 +86,9 @@ public:
 			m_PrevMousePosX = mousePos.first;
 			m_PrevMousePosY = mousePos.second;
 			float len = std::sqrt((mousePosX * mousePosX + mousePosY * mousePosY));
-			if (len > 0.f)
+			if (len > 0.1f)
 			{
-				m_Camera.SetPosition({ pos.x + (mousePosX / len) * m_CameraSpeed * ts, pos.y + (mousePosY / len) * m_CameraSpeed * ts, pos.z});
+				m_Camera.SetPosition({ pos.x + (mousePosX / len) * m_CameraSpeed * ts, pos.y - (mousePosY / len) * m_CameraSpeed * ts, pos.z});
 			}
 		}
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position);
@@ -105,6 +98,8 @@ public:
 
 		MyView::Renderer::BeginScene(m_Camera);
 		{
+			glm::vec4 redColor(0.8f, 0.2f, 0.3f, 0.0f);
+			std::dynamic_pointer_cast<MyView::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_TriangleColor);
 			MyView::Renderer::Submit(m_Shader, m_VertexArray, transform);
 
 			MyView::Renderer::EndScene();
@@ -114,9 +109,11 @@ public:
 		
 	}
 
-	void OnImGuiRender() override
+	virtual void OnImGuiRender() override
 	{
-		ImGui::Text("Hello");
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Triangle Color", &m_TriangleColor[0]);
+		ImGui::End();
 	}
 
 	void OnEvent(MyView::Event& event) override
@@ -132,10 +129,11 @@ private:
 
 	MyView::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 3.f;
+	float m_CameraSpeed = 1.f;
 	float m_PrevMousePosX;
 	float m_PrevMousePosY;
 	glm::vec3 m_Position;
+	glm::vec4 m_TriangleColor = { 0.8f, 0.2f, 0.3f, 0.0f };
 };
 
 

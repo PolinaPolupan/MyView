@@ -49,7 +49,7 @@ namespace MyView {
 			
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+				layer->OnImGuiRender();
 			m_ImGuiLayer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
