@@ -17,6 +17,7 @@ IncludeDir["GLFW"] = "MyView/vendor/GLFW/include"
 IncludeDir["Glad"] = "MyView/vendor/Glad/include"
 IncludeDir["ImGui"] = "MyView/vendor/imgui"
 IncludeDir["glm"] = "MyView/vendor/glm"
+IncludeDir["stb_image"] = "MyView/vendor/stb_image"
 
 include "MyView/vendor/GLFW"
 include "MyView/vendor/Glad"
@@ -39,6 +40,8 @@ project "MyView"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
@@ -50,7 +53,8 @@ project "MyView"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links

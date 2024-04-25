@@ -13,3 +13,6 @@
 	#include <Windows.h>
 #endif
 
+#include "MyView/Log.h"
+#include "MyView/Core.h"
+

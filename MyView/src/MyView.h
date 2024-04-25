@@ -14,6 +14,7 @@
 // ------- Renderer -------------------
 #include "MyView/Renderer/Buffer.h"
 #include "MyView/Renderer/Shader.h"
+#include "MyView/Renderer/Texture.h"
 #include "MyView/Renderer/VertexArray.h"
 
 #include "MyView/Renderer/OrthographicCamera.h"

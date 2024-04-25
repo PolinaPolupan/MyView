@@ -16,16 +16,18 @@ public:
 		m_VertexArray.reset(MyView::VertexArray::Create());
 
 		float vertices[] = {
-			-0.5f, -0.5f, 0.f,
-			 0.5f, -0.5f, 0.f,
-			 0.f,   0.5f, 0.f,
+			-0.5f, -0.5f, 0.f, 0.0f, 0.0f,
+			-0.5f,  0.5f, 0.f, 0.0f, 1.0f,
+			 0.5f,  0.5f, 0.f, 1.0f, 1.0f,
+			 0.5f, -0.5f, 0.f, 1.0f, 0.0f
 		};
 
 		m_VertexBuffer.reset(MyView::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
 			MyView::BufferLayout layout = {
-				{ MyView::ShaderDataType::Float3, "a_Position" }
+				{ MyView::ShaderDataType::Float3, "a_Position" },
+				{ MyView::ShaderDataType::Float2, "a_TexCoord" }
 			};
 
 			m_VertexBuffer->SetLayout(layout);
@@ -33,7 +35,7 @@ public:
 
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[] = { 0, 1, 3, 1, 2, 3};
 		m_IndexBuffer.reset(MyView::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
@@ -65,8 +67,47 @@ public:
 			}
 
 		)";
+		std::string textureVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+			}
+
+		)";
+
+		std::string textureFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+
+		)";
 
 		m_Shader.reset(MyView::Shader::Create(vertexSrc, fragmentSrc));
+		m_TextureShader.reset(MyView::Shader::Create(textureVertexSrc, textureFragmentSrc));
+		m_Texture = MyView::Texture2D::Create("assets/checkerboard.png");
+
+		std::dynamic_pointer_cast<MyView::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<MyView::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(MyView::Timestep ts) override
@@ -97,10 +138,9 @@ public:
 		MyView::RenderCommand::Clear();
 
 		MyView::Renderer::BeginScene(m_Camera);
-		{
-			glm::vec4 redColor(0.8f, 0.2f, 0.3f, 0.0f);
-			std::dynamic_pointer_cast<MyView::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_TriangleColor);
-			MyView::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		{	
+			m_Texture->Bind();
+			MyView::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
 
 			MyView::Renderer::EndScene();
 		}
@@ -122,14 +162,16 @@ public:
 	}
 
 private:
-	std::shared_ptr<MyView::Shader> m_Shader;
-	std::shared_ptr<MyView::VertexBuffer> m_VertexBuffer;
-	std::shared_ptr<MyView::IndexBuffer> m_IndexBuffer;
-	std::shared_ptr<MyView::VertexArray> m_VertexArray;
+	MyView::Ref<MyView::Shader> m_Shader, m_TextureShader;
+	MyView::Ref<MyView::VertexBuffer> m_VertexBuffer;
+	MyView::Ref<MyView::IndexBuffer> m_IndexBuffer;
+	MyView::Ref<MyView::VertexArray> m_VertexArray;
+
+	MyView::Ref<MyView::Texture2D> m_Texture;
 
 	MyView::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 1.f;
+	float m_CameraSpeed = 2.f;
 	float m_PrevMousePosX;
 	float m_PrevMousePosY;
 	glm::vec3 m_Position;
