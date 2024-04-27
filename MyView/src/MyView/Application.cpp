@@ -27,6 +27,9 @@ namespace MyView {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(MV_BIND_EVENT_FN(Application::OnEvent));
 
+		// Init renderer
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 

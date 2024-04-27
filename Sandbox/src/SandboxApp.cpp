@@ -105,6 +105,7 @@ public:
 		m_Shader.reset(MyView::Shader::Create(vertexSrc, fragmentSrc));
 		m_TextureShader.reset(MyView::Shader::Create(textureVertexSrc, textureFragmentSrc));
 		m_Texture = MyView::Texture2D::Create("assets/checkerboard.png");
+		m_SpotifyLogo = MyView::Texture2D::Create("assets/spotify-512.png");
 
 		std::dynamic_pointer_cast<MyView::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<MyView::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -114,6 +115,7 @@ public:
 	{
 		MV_TRACE("Delta time: {0} ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
 
+		/*----------------- Camera Testing -------------------------------------------------*/
 		bool shift = MyView::Input::IsKeyPressed(MV_KEY_RIGHT_SHIFT) || MyView::Input::IsKeyPressed(MV_KEY_LEFT_SHIFT);
 		bool middleMouseButton = MyView::Input::IsMouseButtonPressed(MV_MOUSE_BUTTON_MIDDLE);
 
@@ -132,7 +134,10 @@ public:
 				m_Camera.SetPosition({ pos.x + (mousePosX / len) * m_CameraSpeed * ts, pos.y - (mousePosY / len) * m_CameraSpeed * ts, pos.z});
 			}
 		}
+		/*------------------------------------------------------------------*/
+
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position);
+		glm::mat4 transform1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.0f));
 
 		MyView::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 		MyView::RenderCommand::Clear();
@@ -141,6 +146,8 @@ public:
 		{	
 			m_Texture->Bind();
 			MyView::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
+			m_SpotifyLogo->Bind();
+			MyView::Renderer::Submit(m_TextureShader, m_VertexArray, transform1);
 
 			MyView::Renderer::EndScene();
 		}
@@ -167,7 +174,7 @@ private:
 	MyView::Ref<MyView::IndexBuffer> m_IndexBuffer;
 	MyView::Ref<MyView::VertexArray> m_VertexArray;
 
-	MyView::Ref<MyView::Texture2D> m_Texture;
+	MyView::Ref<MyView::Texture2D> m_Texture, m_SpotifyLogo;
 
 	MyView::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
