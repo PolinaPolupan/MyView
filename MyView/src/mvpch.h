@@ -8,6 +8,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 #ifdef MV_PLATFORM_WINDOWS
 	#include <Windows.h>

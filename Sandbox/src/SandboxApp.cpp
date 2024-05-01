@@ -68,13 +68,15 @@ public:
 
 		)";
 		
-		m_Shader.reset(MyView::Shader::Create(vertexSrc, fragmentSrc));
-		m_TextureShader.reset(MyView::Shader::Create("assets/shaders/Texture.glsl"));
+		m_Shader = MyView::Shader::Create("SquareColor", vertexSrc, fragmentSrc);
+
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+
 		m_Texture = MyView::Texture2D::Create("assets/checkerboard.png");
 		m_SpotifyLogo = MyView::Texture2D::Create("assets/spotify-512.png");
 
-		std::dynamic_pointer_cast<MyView::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<MyView::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<MyView::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<MyView::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(MyView::Timestep ts) override
@@ -110,10 +112,11 @@ public:
 
 		MyView::Renderer::BeginScene(m_Camera);
 		{	
+			auto textureShader = m_ShaderLibrary.Get("Texture");
 			m_Texture->Bind();
-			MyView::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
+			MyView::Renderer::Submit(textureShader, m_VertexArray, transform);
 			m_SpotifyLogo->Bind();
-			MyView::Renderer::Submit(m_TextureShader, m_VertexArray, transform1);
+			MyView::Renderer::Submit(textureShader, m_VertexArray, transform1);
 
 			MyView::Renderer::EndScene();
 		}
@@ -135,7 +138,8 @@ public:
 	}
 
 private:
-	MyView::Ref<MyView::Shader> m_Shader, m_TextureShader;
+	MyView::ShaderLibrary m_ShaderLibrary;
+	MyView::Ref<MyView::Shader> m_Shader;
 	MyView::Ref<MyView::VertexBuffer> m_VertexBuffer;
 	MyView::Ref<MyView::IndexBuffer> m_IndexBuffer;
 	MyView::Ref<MyView::VertexArray> m_VertexArray;

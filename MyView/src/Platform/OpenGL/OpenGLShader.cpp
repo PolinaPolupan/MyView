@@ -20,15 +20,24 @@ namespace MyView {
 		return 0;
 	} 
 
-	OpenGLShader::OpenGLShader(const std::string& filePath)
+	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
-		std::string source = ReadFile(filePath);
+		std::string source = ReadFile(filepath);
 
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		// Extract name from filepath
+		// assets/shaders/Texture.glsl -> Texture
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind(".");
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
@@ -44,7 +53,7 @@ namespace MyView {
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end); // Move pointer to the end of the file
@@ -91,7 +100,9 @@ namespace MyView {
 		// Get a program object.
 		GLuint program = glCreateProgram();
 
-		std::vector<GLenum> glShaderIDs;
+		MV_CORE_ASSERT(shaderSources.size() <= 2, "Only 2 shader types are supported right now");
+		std::array<GLenum, 2> glShaderIDs;
+		int glShaderID = 0;
 		for (auto&& [key, value] : shaderSources)
 		{
 			GLenum type = key; const std::string& source = value;
@@ -128,7 +139,7 @@ namespace MyView {
 			}
 			// Attach our shaders to our program
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderID++] = shader;
 		}
 
 		// Link our program
