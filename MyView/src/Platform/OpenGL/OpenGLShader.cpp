@@ -91,7 +91,7 @@ namespace MyView {
 		// Get a program object.
 		GLuint program = glCreateProgram();
 
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		std::vector<GLenum> glShaderIDs;
 		for (auto&& [key, value] : shaderSources)
 		{
 			GLenum type = key; const std::string& source = value;

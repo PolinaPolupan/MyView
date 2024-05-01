@@ -68,7 +68,6 @@ public:
 
 		)";
 		
-
 		m_Shader.reset(MyView::Shader::Create(vertexSrc, fragmentSrc));
 		m_TextureShader.reset(MyView::Shader::Create("assets/shaders/Texture.glsl"));
 		m_Texture = MyView::Texture2D::Create("assets/checkerboard.png");
