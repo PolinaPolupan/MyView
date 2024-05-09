@@ -4,14 +4,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "Platform/OpenGL/OpenGLShader.h"
 
+
 class ExampleLayer : public MyView::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example")
-		, m_Camera(-1280.f/720.f, 1280.f/720.f, -1.f, 1.f)
-		, m_CameraPosition(0.0f)
-		, m_Position(0.f)
+		: Layer("Example"), m_CameraController(1280.0f / 720.0f)
 	{
 		m_VertexArray.reset(MyView::VertexArray::Create());
 
@@ -83,34 +81,14 @@ public:
 	{
 		MV_TRACE("Delta time: {0} ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
 
-		/*----------------- Camera Testing -------------------------------------------------*/
-		bool shift = MyView::Input::IsKeyPressed(MV_KEY_RIGHT_SHIFT) || MyView::Input::IsKeyPressed(MV_KEY_LEFT_SHIFT);
-		bool middleMouseButton = MyView::Input::IsMouseButtonPressed(MV_MOUSE_BUTTON_MIDDLE);
-
-		if (shift && middleMouseButton)
-		{
-			auto pos = m_Camera.GetPosition();
-			auto mousePos = MyView::Input::GetMousePos();
-
-			auto mousePosX = m_PrevMousePosX - mousePos.first;
-			auto mousePosY = m_PrevMousePosY - mousePos.second;
-			m_PrevMousePosX = mousePos.first;
-			m_PrevMousePosY = mousePos.second;
-			float len = std::sqrt((mousePosX * mousePosX + mousePosY * mousePosY));
-			if (len > 0.1f)
-			{
-				m_Camera.SetPosition({ pos.x + (mousePosX / len) * m_CameraSpeed * ts, pos.y - (mousePosY / len) * m_CameraSpeed * ts, pos.z});
-			}
-		}
-		/*------------------------------------------------------------------*/
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position);
+		m_CameraController.OnUpdate(ts);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_CameraController.GetCamera().GetPosition());
 		glm::mat4 transform1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.0f));
 
 		MyView::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 		MyView::RenderCommand::Clear();
 
-		MyView::Renderer::BeginScene(m_Camera);
+		MyView::Renderer::BeginScene(m_CameraController.GetCamera());
 		{	
 			auto textureShader = m_ShaderLibrary.Get("Texture");
 			m_Texture->Bind();
@@ -118,7 +96,7 @@ public:
 			m_SpotifyLogo->Bind();
 			MyView::Renderer::Submit(textureShader, m_VertexArray, transform1);
 
-			MyView::Renderer::EndScene();
+	 		MyView::Renderer::EndScene();
 		}
 
 		MV_INFO("ExampleLayer::Update");
@@ -132,9 +110,10 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(MyView::Event& event) override
+	void OnEvent(MyView::Event& e) override
 	{
-		MV_TRACE("{0}", event.GetName());
+		MV_TRACE("{0}", e.GetName());
+		m_CameraController.OnEvent(e);
 	}
 
 private:
@@ -146,12 +125,7 @@ private:
 
 	MyView::Ref<MyView::Texture2D> m_Texture, m_SpotifyLogo;
 
-	MyView::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 2.f;
-	float m_PrevMousePosX;
-	float m_PrevMousePosY;
-	glm::vec3 m_Position;
+	MyView::OrthographicCameraController m_CameraController;
 	glm::vec4 m_TriangleColor = { 0.8f, 0.2f, 0.3f, 0.0f };
 };
 

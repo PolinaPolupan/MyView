@@ -162,6 +162,7 @@
     <ClInclude Include="src\MyView\Renderer\Buffer.h" />
     <ClInclude Include="src\MyView\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\MyView\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\MyView\OrthographicCameraController.h" />
     <ClInclude Include="src\MyView\Renderer\RenderCommand.h" />
     <ClInclude Include="src\MyView\Renderer\Renderer.h" />
     <ClInclude Include="src\MyView\Renderer\RendererAPI.h" />
@@ -603,6 +604,7 @@
     <ClCompile Include="src\MyView\Layer.cpp" />
     <ClCompile Include="src\MyView\LayerStack.cpp" />
     <ClCompile Include="src\MyView\Log.cpp" />
+    <ClCompile Include="src\MyView\OrthographicCameraController.cpp" />
     <ClCompile Include="src\MyView\Renderer\Buffer.cpp" />
     <ClCompile Include="src\MyView\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\MyView\Renderer\RenderCommand.cpp" />

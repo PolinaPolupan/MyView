@@ -17,7 +17,7 @@
 #include "MyView/Renderer/Texture.h"
 #include "MyView/Renderer/VertexArray.h"
 
-#include "MyView/Renderer/OrthographicCamera.h"
+#include "MyView/OrthographicCameraController.h"
 
 // ------- Entry Point -------------------
 #include "MyView/EntryPoint.h"
