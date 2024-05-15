@@ -79,8 +79,6 @@ public:
 
 	void OnUpdate(MyView::Timestep ts) override
 	{
-		MV_TRACE("Delta time: {0} ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
-
 		m_CameraController.OnUpdate(ts);
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_CameraController.GetCamera().GetPosition());
 		glm::mat4 transform1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.0f));
@@ -98,8 +96,6 @@ public:
 
 	 		MyView::Renderer::EndScene();
 		}
-
-		MV_INFO("ExampleLayer::Update");
 		
 	}
 
@@ -112,7 +108,6 @@ public:
 
 	void OnEvent(MyView::Event& e) override
 	{
-		MV_TRACE("{0}", e.GetName());
 		m_CameraController.OnEvent(e);
 	}
 
